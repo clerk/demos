@@ -8,10 +8,6 @@ afterAll(async () => {
 	await revokeAPIKey(apiKey.id);
 });
 
-function customVerifyScopes(apiKey: APIKey, requiredScopes: string[]) {
-	return requiredScopes.every((scope) => (apiKey.scopes ?? []).includes(scope));
-}
-
 test("API Key should be created with custom claims", async () => {
 	apiKey = await createAPIKey({
 		name: "custom-claims",

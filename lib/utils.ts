@@ -2,7 +2,7 @@ import type { ClerkClient } from "@clerk/backend";
 import { nanoid } from "nanoid";
 import clerk, { MACHINE_A_SECRET_KEY, TEST_USER_ID } from "@/lib/client";
 
-export function createRequest(token: string) {
+export function createRequest(token?: string) {
 	const headers = new Headers();
 	headers.set("Authorization", `Bearer ${token}`);
 	return new Request("https://example.com", { headers });
@@ -59,20 +59,4 @@ export async function revokeUserApiKeys(userId: string) {
 		});
 		console.log(`Revoked API Key: ${key.id}`);
 	}
-}
-
-export async function findApiKey(
-	id: string,
-	{ expired = false }: { expired?: boolean } = {},
-) {
-	const keys = await clerk.apiKeys.list({
-		subject: TEST_USER_ID,
-		includeInvalid: expired,
-		limit: 100,
-	});
-
-	const key = keys.data.find((key) => key.id === id);
-	if (!key) return undefined;
-
-	return key;
 }
